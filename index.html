@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FISIKA INTERAKTIF - Portal Arus AC Modern</title>
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Pelajari konsep Arus Bolak-Balik (AC) secara interaktif dengan simulator visual, teori mendalam, dan kuis pemahaman.">
+    <meta name="keywords" content="Fisika, Arus AC, Arus Bolak-Balik, Simulator Fisika, Belajar Fisika">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS v4 (Experimental Browser Build) -->
+    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+    
+    <!-- Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- Custom CSS -->
+    <script>
+        (function(){
+            try {
+                var stored = localStorage.getItem('theme');
+                var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+                var theme = stored || (prefersDark ? 'dark' : 'light');
+                document.documentElement.setAttribute('data-theme', theme);
+                // Also set color-scheme early
+                document.documentElement.style.colorScheme = theme;
+                // set body early if present, otherwise wait for DOMContentLoaded
+                if (document.body) {
+                    document.body.setAttribute('data-theme', theme);
+                } else {
+                    document.addEventListener('DOMContentLoaded', function(){
+                        document.body.setAttribute('data-theme', theme);
+                    });
+                }
+                // Ensure meta theme-color exists for mobile UI
+                var meta = document.querySelector('meta[name="theme-color"]');
+                if (!meta) {
+                    meta = document.createElement('meta');
+                    meta.name = 'theme-color';
+                    document.head.appendChild(meta);
+                }
+                try {
+                    var bg = getComputedStyle(document.documentElement).getPropertyValue('--background') || (theme === 'dark' ? '#121116' : '#F4F7F8');
+                    meta.setAttribute('content', bg.trim());
+                } catch (e) {}
+            } catch (e) {
+                // silent
+            }
+        })();
+    </script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-[var(--surface)] text-[var(--on-surface)] selection:bg-[var(--primary-light)] selection:text-[var(--primary)]">
+
+    <!-- Navigation -->
+    <nav id="mainNav" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 py-4 px-6 md:px-12 flex items-center justify-between">
+        <div class="flex items-center gap-2">
+            <div class="w-10 h-10 bg-[var(--primary)] rounded-lg flex items-center justify-center shadow-lg">
+                <i data-lucide="zap" class="text-white w-6 h-6"></i>
+            </div>
+            <span class="font-['Montserrat'] font-bold text-xl tracking-tight hidden sm:block text-[var(--primary)]">
+                Arus<span class="text-[var(--accent)]">Bolak-balik</span>
+            </span>
+        </div>
+
+        <div class="hidden md:flex items-center gap-8">
+            <a href="#materi" class="nav-link font-['Inter'] font-semibold text-sm uppercase tracking-wider text-[var(--on-surface-variant)] hover:text-[var(--primary)]">Materi</a>
+            <a href="#simulator" class="nav-link font-['Inter'] font-semibold text-sm uppercase tracking-wider text-[var(--on-surface-variant)] hover:text-[var(--primary)]">Simulator</a>
+            <a href="#kuis" class="nav-link font-['Inter'] font-semibold text-sm uppercase tracking-wider text-[var(--on-surface-variant)] hover:text-[var(--primary)]">Kuis</a>
+            <a href="#lab" class="nav-link font-['Inter'] font-semibold text-sm uppercase tracking-wider text-[var(--on-surface-variant)] hover:text-[var(--primary)]">Laboratorium</a>
+        </div>
+
+        <button id="themeToggle" type="button" class="theme-toggle" aria-label="Ganti tema">
+            <i id="themeToggleIcon" data-lucide="moon" class="w-5 h-5"></i>
+        </button>
+    </nav>
+
+    <!-- Mobile Menu Overlay -->
+    <div id="mobileMenu" class="mobile-menu fixed inset-0 z-[60] bg-white hidden flex-col p-8">
+        <div class="flex items-center justify-between mb-12">
+            <span class="font-['Montserrat'] font-bold text-xl text-[var(--primary)]">MENU</span>
+            <button id="closeMobileMenu" class="p-2">
+                <i data-lucide="x" class="w-8 h-8 text-[var(--on-surface)]"></i>
+            </button>
+        </div>
+        <div class="flex flex-col gap-6">
+            <a href="#materi" class="font-['Montserrat'] font-bold text-3xl text-[var(--on-surface)]">Materi</a>
+            <a href="#simulator" class="font-['Montserrat'] font-bold text-3xl text-[var(--on-surface)]">Simulator</a>
+            <a href="#kuis" class="font-['Montserrat'] font-bold text-3xl text-[var(--on-surface)]">Kuis</a>
+            <a href="#lab" class="font-['Montserrat'] font-bold text-3xl text-[var(--on-surface)]">Laboratorium</a>
+        </div>
+        <div class="mt-auto">
+            <p class="text-[var(--on-surface-variant)] font-['Inter'] text-sm mb-4">© 2024 Fisika Interaktif</p>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
+        <div class="hero-gradient absolute inset-0 z-0"></div>
+        <div class="hero-pattern absolute inset-0 z-1"></div>
+        
+        <!-- Animated Background Elements -->
+        <div class="absolute top-1/4 left-1/4 w-64 h-64 bg-[var(--accent)] opacity-20 blur-[100px] animate-float"></div>
+        <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-[var(--primary-light)] opacity-20 blur-[120px] animate-float-slow"></div>
+
+        <div class="container mx-auto px-6 relative z-10 grid md:grid-cols-2 gap-12 items-center">
+            <div class="text-white">
+                <!-- <div class="inline-flex items-center gap-2 px-3 py-1 bg-white/10 backdrop-blur-md border border-white/20 rounded-full mb-6 animate-fade-in-up">
+                    <span class="w-2 h-2 bg-[var(--accent)] rounded-full animate-pulse"></span>
+                    <span class="text-xs font-bold uppercase tracking-widest">New: Interactive Lab 2.0</span>
+                </div> -->
+                <h1 class="font-['Montserrat'] font-black text-5xl md:text-7xl leading-tight mb-6 animate-fade-in-up delay-100">
+                    Eksplorasi <br>
+                    <span class="text-[var(--accent)]">Arus AC</span>
+                </h1>
+                <p class="font-['Inter'] text-lg md:text-xl text-white/80 max-w-lg mb-10 animate-fade-in-up delay-200">
+                    Pelajari konsep dasar, karakteristik, dan simulasi interaktif dari Arus Bolak-Balik dalam lingkungan laboratorium virtual presisi tinggi.
+                </p>
+                <div class="flex flex-wrap gap-4 animate-fade-in-up delay-300">
+                    <a href="#materi" class="bg-white text-black text-[var(--primary)] px-8 py-4 rounded-xl font-['Inter'] font-bold transition-all active:scale-95">
+                        Mulai Belajar
+                    </a>
+                    <a href="#simulator" class="bg-white/10 backdrop-blur-md border border-white/30 text-white px-8 py-4 rounded-xl font-['Inter'] font-bold transition-all active:scale-95">
+                        Lihat Simulator
+                    </a>
+                </div>
+                
+                
+            </div>
+
+            <div class="hidden md:block relative animate-scale-in delay-200">
+                <div class="glass-card p-4 rounded-3xl relative overflow-hidden shadow-2xl">
+                    <div class="absolute inset-0 bg-gradient-to-br from-[var(--primary)]/5 to-[var(--accent)]/5"></div>
+                    <img src="https://images.unsplash.com/photo-1635070041078-e363dbe005cb?auto=format&fit=crop&q=80&w=1000" alt="Physics Visualization" class="rounded-2xl w-full h-[500px] object-cover shadow-inner">
+                    
+                    <!-- Overlay Stats Card -->
+                    <!-- <div class="absolute bottom-10 -left-8 glass-card p-5 rounded-2xl shadow-xl animate-float max-w-[200px]">
+                        <div class="flex items-center gap-3 mb-2">
+                            <div class="w-8 h-8 bg-green-500/20 rounded-full flex items-center justify-center">
+                                <i data-lucide="trending-up" class="text-green-600 w-4 h-4"></i>
+                            </div>
+                            <span class="text-[var(--on-surface)] font-bold text-sm">Real-time Lab</span>
+                        </div>
+                        <p class="text-[var(--on-surface-variant)] text-xs font-medium">Monitoring sinkronisasi fase arus 99% akurat.</p>
+                    </div> -->
+                </div>
+            </div>
+        </div>
+        
+        <!-- Scroll Indicator -->
+        <!-- <a href="#materi" class="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-white/50 hover:text-white transition-colors">
+            <span class="text-[10px] font-bold uppercase tracking-[0.3em]">Scroll Down</span>
+            <i data-lucide="chevron-down" class="w-5 h-5 animate-bounce"></i>
+        </a> -->
+    </section>
+
+    <!-- Theory Section -->
+    <section id="materi" class="py-24 px-6 bg-[var(--surface)]">
+        <div class="container mx-auto max-w-[1280px]">
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6 reveal">
+                <div class="max-w-2xl">
+                    <span class="chip mb-4" style="background: var(--primary-fixed); color: var(--primary);">
+                        <i data-lucide="book-open" class="w-3 h-3"></i> DASAR TEORI
+                    </span>
+                    <h2 class="font-['Montserrat'] font-extrabold text-4xl md:text-5xl text-[var(--on-surface)] leading-tight">
+                        Memahami Arus <br><span class="text-[var(--primary)]">Bolak-Balik (AC)</span>
+                    </h2>
+                </div>
+                <p class="font-['Inter'] text-[var(--on-surface-variant)] md:max-w-xs">
+                    Arus listrik yang arah dan besarnya berubah-ubah secara periodik terhadap waktu.
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8 reveal delay-100">
+                <!-- Theory Card 1 -->
+                <div class="content-card p-8 group">
+                    <div class="w-14 h-14 bg-[var(--surface-container)] rounded-2xl flex items-center justify-center mb-8 group-hover:bg-[var(--primary)] transition-colors">
+                        <i data-lucide="activity" class="text-[var(--primary)] w-7 h-7 group-hover:text-white transition-colors"></i>
+                    </div>
+                    <h3 class="font-['Montserrat'] font-bold text-xl mb-4">Apa itu Arus AC?</h3>
+                    <p class="font-['Inter'] text-[var(--on-surface-variant)] leading-relaxed mb-6">
+                        Berbeda dengan arus searah (DC) yang konstan, AC memiliki nilai yang berosilasi, biasanya mengikuti pola gelombang sinusoidal.
+                    </p>
+                    <div class="accordion-item border-t border-[var(--outline-variant)] pt-4">
+                        <button class="accordion-toggle w-full flex items-center justify-between font-bold text-sm text-[var(--primary)]">
+                            LIHAT DETAIL
+                            <i data-lucide="chevron-down" class="accordion-icon w-4 h-4 transition-transform"></i>
+                        </button>
+                        <div class="accordion-content">
+                            <p class="text-sm text-[var(--on-surface-variant)] py-4">
+                                Digunakan secara luas dalam transmisi listrik karena kemudahannya untuk diubah tegangannya menggunakan transformator.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Theory Card 2 -->
+                <div class="content-card p-8 group">
+                    <div class="w-14 h-14 bg-[var(--surface-container)] rounded-2xl flex items-center justify-center mb-8 group-hover:bg-[var(--accent)] transition-colors">
+                        <i data-lucide="bar-chart-2" class="text-[var(--accent)] w-7 h-7 group-hover:text-white transition-colors"></i>
+                    </div>
+                    <h3 class="font-['Montserrat'] font-bold text-xl mb-4">Karakteristik Utama</h3>
+                    <ul class="space-y-4 mb-6">
+                        <li class="flex items-start gap-3">
+                            <div class="w-1.5 h-1.5 bg-[var(--accent)] rounded-full mt-2"></div>
+                            <p class="text-sm font-['Inter'] text-[var(--on-surface-variant)]"><strong>Amplitudo:</strong> Nilai puncak tegangan/arus.</p>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <div class="w-1.5 h-1.5 bg-[var(--accent)] rounded-full mt-2"></div>
+                            <p class="text-sm font-['Inter'] text-[var(--on-surface-variant)]"><strong>Frekuensi:</strong> Jumlah siklus per detik (Hz).</p>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <div class="w-1.5 h-1.5 bg-[var(--accent)] rounded-full mt-2"></div>
+                            <p class="text-sm font-['Inter'] text-[var(--on-surface-variant)]"><strong>Periode:</strong> Waktu untuk satu siklus penuh (s).</p>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Theory Card 3 -->
+                <div class="content-card p-8 group">
+                    <div class="w-14 h-14 bg-[var(--surface-container)] rounded-2xl flex items-center justify-center mb-8 group-hover:bg-[var(--primary)] transition-colors">
+                        <i data-lucide="code" class="text-[var(--primary)] w-7 h-7 group-hover:text-white transition-colors"></i>
+                    </div>
+                    <h3 class="font-['Montserrat'] font-bold text-xl mb-4">Rumus Dasar</h3>
+                    <p class="font-['Inter'] text-[var(--on-surface-variant)] text-sm mb-6">Persamaan matematis representasi gelombang tegangan:</p>
+                    <div class="formula-block mb-6">
+                        <span class="text-[var(--primary)] font-bold text-lg">V = V<sub>max</sub> sin(ωt)</span>
+                    </div>
+                    <p class="text-xs text-[var(--on-surface-variant)] font-['Inter'] italic italic">
+                        Di mana ω = 2πf adalah frekuensi sudut.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Simulator Section -->
+    <section id="simulator" class="py-24 px-6 bg-[var(--surface-container)]">
+        <div class="container mx-auto max-w-[1280px]">
+            <div class="text-center max-w-3xl mx-auto mb-16 reveal">
+                <span class="chip mb-4 bg-white text-[var(--accent)] shadow-sm">
+                    <i data-lucide="monitor" class="w-3 h-3"></i> VISUALISASI REAL-TIME
+                </span>
+                <h2 class="font-['Montserrat'] font-extrabold text-4xl text-[var(--on-surface)] mb-4">
+                    Simulator Analisis Tegangan
+                </h2>
+                <p class="font-['Inter'] text-[var(--on-surface-variant)]">
+                    Sesuaikan parameter di bawah ini untuk melihat bagaimana perubahan amplitudo, frekuensi, dan fase mempengaruhi bentuk gelombang AC secara visual.
+                </p>
+            </div>
+
+            <div class="grid lg:grid-cols-12 gap-8 items-start reveal delay-100">
+                <!-- Controls -->
+                <div class="lg:col-span-4 space-y-6">
+                    <div class="content-card p-6 bg-white shadow-xl">
+                        <h4 class="font-['Montserrat'] font-bold text-lg mb-6 flex items-center gap-2">
+                            <i data-lucide="sliders" class="w-5 h-5 text-[var(--primary)]"></i>
+                            Parameter Input
+                        </h4>
+                        
+                        <!-- Amplitudo -->
+                        <div class="space-y-3 mb-8">
+                            <div class="flex justify-between items-center">
+                                <label class="text-sm font-bold text-[var(--on-surface-variant)]">AMPLITUDO (V<sub>max</sub>)</label>
+                                <span id="amplitudeValue" class="font-['Fira_Code'] font-bold text-[var(--primary)] text-sm bg-[var(--primary-fixed)] px-2 py-1 rounded">220 V</span>
+                            </div>
+                            <input type="range" id="amplitudeSlider" min="10" max="400" value="220">
+                            <p class="text-[10px] text-[var(--on-surface-variant)] opacity-70">Mengatur nilai puncak tegangan maksimum.</p>
+                        </div>
+
+                        <!-- Frekuensi -->
+                        <div class="space-y-3 mb-8">
+                            <div class="flex justify-between items-center">
+                                <label class="text-sm font-bold text-[var(--on-surface-variant)]">FREKUENSI (f)</label>
+                                <span id="frequencyValue" class="font-['Fira_Code'] font-bold text-[var(--accent)] text-sm bg-[var(--surface-container)] px-2 py-1 rounded">50 Hz</span>
+                            </div>
+                            <input type="range" id="frequencySlider" min="1" max="100" value="50">
+                            <p class="text-[10px] text-[var(--on-surface-variant)] opacity-70">Jumlah siklus gelombang per detik.</p>
+                        </div>
+
+                        <!-- Fase -->
+                        <div class="space-y-3">
+                            <div class="flex justify-between items-center">
+                                <label class="text-sm font-bold text-[var(--on-surface-variant)]">SUDUT FASE (φ)</label>
+                                <span id="phaseValue" class="font-['Fira_Code'] font-bold text-[var(--secondary)] text-sm bg-[var(--secondary-container)] px-2 py-1 rounded">0°</span>
+                            </div>
+                            <input type="range" id="phaseSlider" min="-180" max="180" value="0">
+                            <p class="text-[10px] text-[var(--on-surface-variant)] opacity-70">Pergeseran horizontal posisi awal gelombang.</p>
+                        </div>
+                    </div>
+
+                    <!-- Calculation Results -->
+                    <div class="content-card p-6 bg-[var(--primary)] text-black overflow-hidden relative">
+                        <div class="absolute -right-10 -top-10 w-32 h-32 bg-white/10 rounded-full blur-2xl"></div>
+                        <h4 class="font-['Montserrat'] font-bold text-lg mb-6 flex items-center gap-2">
+                            <i data-lucide="calculator" class="w-5 h-5 text-[var(--accent)]"></i>
+                            Hasil Kalkulasi
+                        </h4>
+                        <div class="grid grid-cols-2 text-black gap-4">
+                            <div class="bg-white/10 p-3 rounded-lg">
+                                <p class="text-[10px] uppercase font-bold opacity-70 mb-1">Tegangan Efektif</p>
+                                <p id="calcVrms" class="font-['Fira_Code'] font-bold text-lg text-[var(--accent)]">155.6 V</p>
+                            </div>
+                            <div class="bg-white/10 p-3 rounded-lg">
+                                <p class="text-[10px] uppercase font-bold opacity-70 mb-1">Periode (T)</p>
+                                <p id="calcPeriod" class="font-['Fira_Code'] font-bold text-lg">20.00 ms</p>
+                            </div>
+                            <div class="bg-white/10 p-3 rounded-lg">
+                                <p class="text-[10px] uppercase font-bold opacity-70 mb-1">Frekuensi Sudut</p>
+                                <p id="calcOmega" class="font-['Fira_Code'] font-bold text-lg">314.2 rad/s</p>
+                            </div>
+                            <div class="bg-white/10 p-3 rounded-lg">
+                                <p class="text-[10px] uppercase font-bold opacity-70 mb-1">Nilai Puncak</p>
+                                <p id="calcVmax" class="font-['Fira_Code'] font-bold text-lg">220.0 V</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Display -->
+                <div class="lg:col-span-8 space-y-6">
+                    <div class="chart-container h-[500px] shadow-2xl flex flex-col">
+                        <div class="flex items-center justify-between mb-4 border-b border-[var(--outline-variant)] pb-4">
+                            <div class="flex items-center gap-4">
+                                <div class="flex items-center gap-2">
+                                    <span class="w-3 h-3 rounded-full bg-[var(--accent)]"></span>
+                                    <span class="text-xs font-bold text-[var(--on-surface-variant)] uppercase">Tegangan V(t)</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <span class="w-3 h-3 rounded-full border-2 border-[var(--primary)]"></span>
+                                    <span class="text-xs font-bold text-[var(--on-surface-variant)] uppercase">Arus I(t)</span>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <button class="p-1.5 hover:bg-[var(--surface-container)] rounded transition-colors" title="Export Data">
+                                    <i data-lucide="download" class="w-4 h-4 text-[var(--on-surface-variant)]"></i>
+                                </button>
+                                <button class="p-1.5 hover:bg-[var(--surface-container)] rounded transition-colors" title="Settings">
+                                    <i data-lucide="settings" class="w-4 h-4 text-[var(--on-surface-variant)]"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="flex-grow">
+                            <canvas id="waveCanvas"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Lab Note -->
+                    <div class="flex items-start gap-4 p-5 bg-blue-50 border-l-4 border-blue-400 rounded-r-lg">
+                        <i data-lucide="info" class="w-6 h-6 text-blue-500 mt-0.5"></i>
+                        <div>
+                            <h5 class="text-blue-900 font-bold text-sm mb-1">Catatan Laboratorium</h5>
+                            <p class="text-blue-800 text-xs leading-relaxed">
+                                Simulator ini mengasumsikan beban resistif murni untuk garis arus yang solid. Garis putus-putus menunjukkan pergeseran fase kapasitif/induktif secara teoritis.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quiz Section -->
+    <section id="kuis" class="py-24 px-6 bg-[var(--surface)]">
+        <div class="container mx-auto max-w-[1000px]">
+            <div class="flex flex-col items-center text-center mb-16 reveal">
+                <div class="w-20 h-20 bg-[var(--primary-fixed)] rounded-3xl flex items-center justify-center mb-8 rotate-3 shadow-xl">
+                    <i data-lucide="help-circle" class="text-[var(--primary)] w-10 h-10"></i>
+                </div>
+                <h2 class="font-['Montserrat'] font-extrabold text-4xl text-[var(--on-surface)] mb-4">Uji Pemahaman</h2>
+                <p class="font-['Inter'] text-[var(--on-surface-variant)] max-w-xl">
+                    Evaluasi pengetahuan Anda tentang fase tegangan, arus, dan karakteristik rangkaian AC melalui kuis interaktif berikut.
+                </p>
+            </div>
+
+            <div class="reveal delay-100">
+                <div class="content-card p-8 md:p-12 shadow-2xl relative overflow-hidden min-h-[400px]">
+                    <!-- Progress bar -->
+                    <div class="absolute top-0 left-0 w-full h-1.5 bg-[var(--surface-container)]">
+                        <div id="quizProgressBar" class="h-full bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] transition-all duration-500" style="width: 0%"></div>
+                    </div>
+
+                    <div id="quizResult" class="hidden mb-8">
+                        <!-- Result will be injected here -->
+                    </div>
+
+                    <div id="quizContainer">
+                        <!-- Question will be injected here -->
+                    </div>
+
+                    <div class="flex items-center justify-between mt-12 pt-8 border-t border-[var(--outline-variant)]">
+                        <div class="flex gap-4">
+                            <button id="prevBtn" class="flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-sm transition-all disabled:opacity-30 disabled:cursor-not-allowed hover:bg-[var(--surface-container)] text-[var(--on-surface-variant)]">
+                                <i data-lucide="arrow-left" class="w-4 h-4"></i> SEBELUMNYA
+                            </button>
+                            <button id="nextBtn" class="flex items-center gap-2 bg-[var(--primary)] text-white px-8 py-3 rounded-xl font-bold text-sm transition-all shadow-md hover:bg-[var(--primary-container)] active:scale-95 disabled:opacity-30">
+                                BERIKUTNYA <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                        <div class="hidden sm:block">
+                            <span id="quizProgressText" class="font-['Fira_Code'] text-xs font-bold text-[var(--on-surface-variant)] uppercase tracking-wider">
+                                0/10 Soal dijawab
+                            </span>
+                        </div>
+                        <button id="submitQuiz" class="hidden items-center gap-2 bg-[var(--accent)] text-white px-8 py-3 rounded-xl font-bold text-sm transition-all shadow-md hover:shadow-accent/40 active:scale-95">
+                            KIRIM JAWABAN <i data-lucide="check-circle" class="w-4 h-4"></i>
+                        </button>
+                        <button id="retryQuiz" class="hidden items-center gap-2 bg-[var(--secondary)] text-white px-8 py-3 rounded-xl font-bold text-sm transition-all shadow-md active:scale-95">
+                            ULANGI KUIS <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-[var(--on-surface)] text-white py-20 px-6">
+        <div class="container mx-auto max-w-[1280px]">
+            <div class="grid md:grid-cols-4 gap-12 mb-16">
+                <div class="md:col-span-2">
+                    <div class="flex items-center gap-2 mb-6">
+                        <div class="w-8 h-8 bg-white/10 rounded flex items-center justify-center">
+                            <i data-lucide="zap" class="text-[var(--accent)] w-5 h-5"></i>
+                        </div>
+                        <span class="font-['Montserrat'] font-bold text-lg tracking-tight">FISIKA<span class="text-[var(--accent)]">INTERAKTIF</span></span>
+                    </div>
+                    <p class="font-['Inter'] text-white/50 max-w-sm mb-8">
+                        Portal edukasi fisika modern yang menggabungkan presisi ilmiah dengan pengalaman visual interaktif untuk masa depan pembelajaran.
+                    </p>
+                    <div class="flex gap-4">
+                        <a href="#" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-[var(--primary)] transition-colors"><i data-lucide="twitter" class="w-5 h-5"></i></a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-[var(--primary)] transition-colors"><i data-lucide="instagram" class="w-5 h-5"></i></a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-[var(--primary)] transition-colors"><i data-lucide="github" class="w-5 h-5"></i></a>
+                    </div>
+                </div>
+                <div>
+                    <h5 class="font-['Montserrat'] font-bold mb-6 text-[var(--accent)]">NAVIGASI</h5>
+                    <ul class="space-y-4 font-['Inter'] text-sm text-white/60">
+                        <li><a href="#materi" class="hover:text-white transition-colors">Materi Dasar</a></li>
+                        <li><a href="#simulator" class="hover:text-white transition-colors">Simulator AC</a></li>
+                        <li><a href="#kuis" class="hover:text-white transition-colors">Uji Pemahaman</a></li>
+                        <li><a href="#lab" class="hover:text-white transition-colors">Laboratorium</a></li>
+                    </ul>
+                </div>
+               
+            </div>
+           
+        </div>
+    </footer>
+
+    <!-- Back to top -->
+    <button id="backToTop" class="fixed bottom-8 right-8 w-12 h-12 bg-[var(--primary)] text-white rounded-full shadow-2xl flex items-center justify-center hover:scale-110 active:scale-95 transition-all z-40">
+        <i data-lucide="chevron-up" class="w-6 h-6"></i>
+    </button>
+
+    <!-- Custom Script -->
+    <script src="app.js"></script>
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+    </script>
+</body>
+</html>

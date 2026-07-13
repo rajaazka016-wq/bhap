@@ -1,0 +1,505 @@
+/* ============================================
+   FISIKA INTERAKTIF - Custom Styles
+   Design System: Scientific Minimalism
+   Colors: Deep Sea & Slate
+   ============================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500;600&display=swap');
+
+/* CSS Custom Properties from Stitch Design System */
+:root {
+  color-scheme: light;
+  --primary: #4f378a;
+  --primary-container: #6750a4;
+  --primary-light: #cfbcff;
+  --primary-fixed: #e9ddff;
+  --secondary: #63597c;
+  --secondary-container: #e1d4fd;
+  --tertiary: #765b00;
+  --tertiary-container: #c9a74d;
+  --surface: #fdf7ff;
+  --surface-dim: #ded8e0;
+  --surface-container: #f2ecf4;
+  --surface-container-high: #ece6ee;
+  --surface-container-highest: #e6e0e9;
+  --on-surface: #1d1b20;
+  --on-surface-variant: #494551;
+  --outline: #7a7582;
+  --outline-variant: #cbc4d2;
+  --error: #ba1a1a;
+  --error-container: #ffdad6;
+  --on-primary: #ffffff;
+  --on-error: #ffffff;
+  --accent: #5C9EAD;
+  --accent-dark: #326273;
+  --background: #F4F7F8;
+  --card-border: #E1E8EB;
+  --success: #2e7d32;
+  --success-light: #e8f5e9;
+  --warning: #f57c00;
+  --warning-light: #fff3e0;
+}
+
+html[data-theme="dark"], body[data-theme="dark"] {
+  color-scheme: dark;
+  --primary: #d8c6ff;
+  --primary-container: #7c67bf;
+  --primary-light: #3f315b;
+  --primary-fixed: #2d2543;
+  --secondary: #cbbef0;
+  --secondary-container: #3a324b;
+  --tertiary: #f0ca5d;
+  --tertiary-container: #7a5b00;
+  --surface: #16131b;
+  --surface-dim: #0f0d13;
+  --surface-container: #201c29;
+  --surface-container-high: #2a2534;
+  --surface-container-highest: #342f3d;
+  --on-surface: #f5efff;
+  --on-surface-variant: #d3cfe3;
+  --outline: #928ca0;
+  --outline-variant: #4c4558;
+  --error: #ffb4ab;
+  --error-container: #93000a;
+  --on-primary: #1e1630;
+  --on-error: #690005;
+  --accent: #86c8d6;
+  --accent-dark: #5f99a7;
+  --background: #121116;
+  --card-border: #2f2a3a;
+  --success: #8fe09d;
+  --success-light: #16321f;
+  --warning: #ffb974;
+  --warning-light: #422506;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--on-surface);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Enable smooth transitions after initial load (class added by JS) */
+html.theme-transition, body.theme-transition {
+  transition: background-color 0.28s ease, color 0.28s ease, border-color 0.28s ease, box-shadow 0.28s ease;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 9999px;
+  border: 1px solid var(--outline-variant);
+  background: var(--surface-container);
+  color: var(--on-surface);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
+}
+.theme-toggle:hover {
+  transform: translateY(-1px);
+  border-color: var(--accent);
+}
+
+html[data-theme="dark"] .content-card,
+html[data-theme="dark"] .chart-container,
+body[data-theme="dark"] .content-card,
+body[data-theme="dark"] .chart-container {
+  background: var(--surface-container);
+  border-color: var(--outline-variant);
+}
+
+html[data-theme="dark"] .glass-card,
+body[data-theme="dark"] .glass-card {
+  background: rgba(22, 19, 27, 0.85);
+  border-color: rgba(146, 140, 160, 0.35);
+}
+
+html[data-theme="dark"] #mobileMenu,
+body[data-theme="dark"] #mobileMenu {
+  background: var(--surface);
+  color: var(--on-surface);
+}
+
+html[data-theme="dark"] #mobileMenu a,
+body[data-theme="dark"] #mobileMenu a {
+  color: var(--on-surface);
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--surface-container);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--outline-variant);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--outline);
+}
+
+/* Hero Section */
+.hero-gradient {
+  background: linear-gradient(135deg, #4f378a 0%, #6750a4 40%, #5C9EAD 100%);
+}
+
+.hero-pattern {
+  background-image: 
+    radial-gradient(circle at 20% 50%, rgba(207, 188, 255, 0.15) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(92, 158, 173, 0.2) 0%, transparent 50%),
+    radial-gradient(circle at 60% 80%, rgba(233, 221, 255, 0.1) 0%, transparent 40%);
+}
+
+/* Floating animation for hero elements */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-12px); }
+}
+
+@keyframes floatSlow {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-8px) rotate(2deg); }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 20px rgba(103, 80, 164, 0.3); }
+  50% { box-shadow: 0 0 40px rgba(103, 80, 164, 0.6); }
+}
+
+@keyframes wave-draw {
+  from { stroke-dashoffset: 1000; }
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideInLeft {
+  from { opacity: 0; transform: translateX(-40px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.animate-float { animation: float 4s ease-in-out infinite; }
+.animate-float-slow { animation: floatSlow 6s ease-in-out infinite; }
+.animate-pulse-glow { animation: pulse-glow 3s ease-in-out infinite; }
+.animate-fade-in-up { animation: fadeInUp 0.8s ease-out forwards; }
+.animate-slide-in-left { animation: slideInLeft 0.8s ease-out forwards; }
+.animate-scale-in { animation: scaleIn 0.6s ease-out forwards; }
+
+/* Stagger delays for animations */
+.delay-100 { animation-delay: 0.1s; }
+.delay-200 { animation-delay: 0.2s; }
+.delay-300 { animation-delay: 0.3s; }
+.delay-400 { animation-delay: 0.4s; }
+.delay-500 { animation-delay: 0.5s; }
+
+/* Glass morphism card */
+.glass-card {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(203, 196, 210, 0.4);
+}
+
+/* Content cards with hover lift */
+.content-card {
+  background: var(--surface);
+  border: 1px solid var(--card-border);
+  border-radius: 0.5rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.content-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(79, 55, 138, 0.12);
+  border-color: var(--accent);
+}
+
+/* Formula block styling */
+.formula-block {
+  font-family: 'Fira Code', monospace;
+  background: linear-gradient(135deg, var(--primary-fixed) 0%, var(--surface-container) 100%);
+  border-left: 4px solid var(--primary-container);
+  border-radius: 0 0.5rem 0.5rem 0;
+  padding: 1.25rem 1.5rem;
+}
+
+/* Navigation active state */
+.nav-link {
+  position: relative;
+  transition: color 0.3s ease;
+}
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--accent);
+  transition: width 0.3s ease;
+}
+.nav-link:hover::after,
+.nav-link.active::after {
+  width: 100%;
+}
+
+/* Quiz option styling */
+.quiz-option {
+  border: 2px solid var(--outline-variant);
+  border-radius: 0.5rem;
+  padding: 1rem 1.25rem;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  background: var(--surface);
+}
+.quiz-option:hover {
+  border-color: var(--accent);
+  background: rgba(92, 158, 173, 0.05);
+  transform: translateX(4px);
+}
+.quiz-option.selected {
+  border-color: var(--primary-container);
+  background: var(--primary-fixed);
+}
+.quiz-option.correct {
+  border-color: var(--success);
+  background: var(--success-light);
+}
+.quiz-option.incorrect {
+  border-color: var(--error);
+  background: var(--error-container);
+}
+
+/* Range slider custom */
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 6px;
+  border-radius: 3px;
+  background: var(--outline-variant);
+  outline: none;
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--accent);
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(92, 158, 173, 0.4);
+  transition: transform 0.2s ease;
+}
+input[type="range"]::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+}
+input[type="range"]::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--accent);
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 2px 8px rgba(92, 158, 173, 0.4);
+}
+
+/* Chip / Tag styling */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  font-family: 'Inter', sans-serif;
+  transition: all 0.2s ease;
+}
+.chip:hover {
+  transform: scale(1.05);
+}
+
+/* Progress bar */
+.progress-bar {
+  height: 6px;
+  border-radius: 3px;
+  background: var(--outline-variant);
+  overflow: hidden;
+}
+.progress-bar-fill {
+  height: 100%;
+  border-radius: 3px;
+  background: linear-gradient(90deg, var(--accent), var(--primary-container));
+  transition: width 0.5s ease;
+}
+
+/* Canvas container */
+.chart-container {
+  position: relative;
+  background: var(--surface);
+  border: 1px solid var(--card-border);
+  border-radius: 0.5rem;
+  padding: 1rem;
+}
+
+/* Section reveal animation */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Tab system */
+.tab-btn {
+  padding: 0.625rem 1.25rem;
+  border-radius: 9999px;
+  font-weight: 600;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.875rem;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  border: 2px solid transparent;
+}
+.tab-btn.active {
+  background: var(--primary-container);
+  color: white;
+  box-shadow: 0 4px 12px rgba(103, 80, 164, 0.3);
+}
+.tab-btn:not(.active) {
+  background: var(--surface-container);
+  color: var(--on-surface-variant);
+}
+.tab-btn:not(.active):hover {
+  background: var(--surface-container-high);
+  border-color: var(--outline-variant);
+}
+
+/* Tooltip */
+.tooltip {
+  position: relative;
+}
+.tooltip::before {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 0.5rem 0.75rem;
+  background: var(--on-surface);
+  color: white;
+  font-size: 0.75rem;
+  border-radius: 0.375rem;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+.tooltip:hover::before {
+  opacity: 1;
+}
+
+/* Mobile menu */
+.mobile-menu {
+  transform: translateX(100%);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.mobile-menu.open {
+  transform: translateX(0);
+}
+
+/* Skeleton loading */
+.skeleton {
+  background: linear-gradient(90deg, var(--surface-container) 25%, var(--surface-container-high) 50%, var(--surface-container) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 0.25rem;
+}
+
+/* Number counter animation */
+.counter {
+  font-family: 'Fira Code', monospace;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Accordion */
+.accordion-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.accordion-content.open {
+  max-height: 500px;
+}
+
+/* Back to top button */
+#backToTop {
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.3s ease;
+}
+#backToTop.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Dark-mode utility overrides to remove leftover white areas */
+html[data-theme="dark"] [class*="bg-white"],
+html[data-theme="dark"] .bg-white {
+  background-color: var(--surface) !important;
+}
+
+html[data-theme="dark"] .text-black {
+  color: var(--on-surface) !important;
+}
+
+html[data-theme="dark"] .quiz-option {
+  background: var(--surface) !important;
+  border-color: var(--outline-variant) !important;
+  color: var(--on-surface) !important;
+}
+
+html[data-theme="dark"] .quiz-option:hover {
+  border-color: var(--accent) !important;
+  background: rgba(92, 158, 173, 0.04) !important;
+}
+
+/* Footer was using --on-surface as background in HTML, override it for dark theme */
+html[data-theme="dark"] footer {
+  background: var(--surface-container-highest) !important;
+  color: var(--on-surface) !important;
+}
+
+/* Ensure chart container and cards are dark in dark mode */
+html[data-theme="dark"] .chart-container,
+html[data-theme="dark"] .content-card,
+html[data-theme="dark"] .glass-card {
+  background: var(--surface-container) !important;
+  border-color: var(--card-border) !important;
+}
+
